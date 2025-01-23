@@ -6,6 +6,12 @@ on:
       env:
         required: true
         type: string
+      resource_group_name:
+        required: true
+        type: string
+      app_service_name:
+        required: true
+        type: string
 
 jobs:
   deploy:
@@ -26,8 +32,13 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: "Deploy to Azure App Service"
+      - name: Deploy to Azure App Service
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          app-name: ${{ inputs.app_service_name }}
+          slot-name: slot
           package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
+
+      - name: Swap Slots
+        run: |
+          az webapp deployment slot swap -g ${{ inputs.resource_group_name }} -n ${{ inputs.app_service_name }} --slot slot --target-slot production --verbose
