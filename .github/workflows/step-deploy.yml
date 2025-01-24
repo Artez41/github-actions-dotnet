@@ -39,7 +39,6 @@ jobs:
             --template-file infrastructure/main.bicep \
             --resource-group ${{ inputs.resource_group_name }} \
             --verbose
-
       - name: Deploy to Azure App Service
         uses: azure/webapps-deploy@v2
         with:
