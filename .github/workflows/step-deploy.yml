@@ -33,13 +33,12 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Run Bicep
-          run: |
-            az deployment group create \
-              --name ${{ inputs.env }}-deployment-${{ github.run_number }} \
-              --template-file infrastructure/main.bicep \
-              --resource-group ${{ inputs.resource_group_name }} \
-              --verbose
-
+        run: |
+          az deployment group create \
+            --name ${{ inputs.env }}-deployment-${{ github.run_number }} \
+            --template-file infrastructure/main.bicep \
+            --resource-group ${{ inputs.resource_group_name }} \
+            --verbose
       - name: Deploy to Azure App Service
         uses: azure/webapps-deploy@v2
         with:
